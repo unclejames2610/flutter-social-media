@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           // the wall
           Expanded(
-            child: StreamBuilder(
+            child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("User Posts")
                   .orderBy(
