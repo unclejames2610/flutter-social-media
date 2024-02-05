@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:social_media/components/drawer.dart';
 import 'package:social_media/components/my_text_field.dart';
 import 'package:social_media/components/wall_post.dart';
+import 'package:social_media/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,31 +29,53 @@ class _HomePageState extends State<HomePage> {
         'UserEmail': currentUser.email,
         'Message': textController.text,
         'TimeStamp': Timestamp.now(),
+        'Likes': [],
       });
     }
+
+    // clear
+    setState(() {
+      textController.clear();
+    });
+  }
+
+  void goToProfilePage() {
+    Navigator.pop(context);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
+      drawer: MyDrawer(
+        onProfiletap: goToProfilePage,
+        onSignOut: signOut,
+      ),
       appBar: AppBar(
-          backgroundColor: Colors.grey[900],
-          title: const Text(
-            "The Wall",
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        backgroundColor: Colors.grey[900],
+        title: const Text(
+          "The Wall",
+          style: TextStyle(
+            color: Colors.white,
           ),
-          actions: [
-            IconButton(
-              onPressed: signOut,
-              icon: const Icon(
-                Icons.logout,
-                color: Colors.white,
-              ),
-            )
-          ]),
+        ),
+        // actions: [
+        //   IconButton(
+        //     onPressed: signOut,
+        //     icon: const Icon(
+        //       Icons.logout,
+        //       color: Colors.white,
+        //     ),
+        //   )
+        // ],
+      ),
       body: Column(
         children: [
           // the wall
@@ -73,6 +97,8 @@ class _HomePageState extends State<HomePage> {
                       return WallPost(
                         message: post['Message'],
                         user: post['UserEmail'],
+                        postId: post.id,
+                        likes: List<String>.from(post['Likes'] ?? []),
                       );
                     },
                   );
@@ -82,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
                 return const Center(
-                  child: Text("loading"),
+                  child: CircularProgressIndicator(),
                 );
               },
             ),
@@ -110,6 +136,13 @@ class _HomePageState extends State<HomePage> {
           // logged in as
           Text(
             "Logged in as: ${currentUser.email!}",
+            style: const TextStyle(
+              color: Colors.grey,
+            ),
+          ),
+
+          const SizedBox(
+            height: 50,
           ),
         ],
       ),

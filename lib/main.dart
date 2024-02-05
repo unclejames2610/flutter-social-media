@@ -18,9 +18,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.grey[900],
+        appBarTheme: AppBarTheme(
+            color: Colors.grey[900],
+            titleTextStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+            ),
+            iconTheme: const IconThemeData(color: Colors.white)),
+        colorScheme:
+            ColorScheme.fromSwatch().copyWith(background: Colors.grey[300]),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.black,
+        ),
+      ),
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: const AuthPage(),
     );
   }
 }
