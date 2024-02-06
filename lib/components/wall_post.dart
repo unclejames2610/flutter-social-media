@@ -9,16 +9,19 @@ import 'package:social_media/helper/helper_methods.dart';
 class WallPost extends StatefulWidget {
   final String message;
   final String user;
+  final String time;
   final String postId;
   final List<String> likes;
   // final String time;
-  const WallPost(
-      {super.key,
-      required this.message,
-      required this.user,
-      // required this.time,
-      required this.postId,
-      required this.likes});
+  const WallPost({
+    super.key,
+    required this.message,
+    required this.user,
+    // required this.time,
+    required this.postId,
+    required this.likes,
+    required this.time,
+  });
 
   @override
   State<WallPost> createState() => _WallPostState();
@@ -73,10 +76,13 @@ class _WallPostState extends State<WallPost> {
     showDialog(
       context: context,
       builder: ((context) => AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             title: const Text("Add Comment"),
             content: TextField(
               controller: _commentTextController,
-              decoration: const InputDecoration(hintText: "Write a comment.."),
+              decoration: InputDecoration(
+                  hintText: "Write a comment..",
+                  hintStyle: TextStyle(color: Colors.grey[400])),
             ),
             actions: [
               // cancel btn
@@ -86,7 +92,11 @@ class _WallPostState extends State<WallPost> {
 
                   _commentTextController.clear();
                 },
-                child: const Text("Cancel"),
+                child: Text(
+                  "Cancel",
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
               ),
               // post btn
               TextButton(
@@ -96,7 +106,11 @@ class _WallPostState extends State<WallPost> {
                   Navigator.pop(context);
                   _commentTextController.clear();
                 },
-                child: const Text("Post"),
+                child: Text(
+                  "Post",
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                ),
               ),
             ],
           )),
@@ -107,7 +121,7 @@ class _WallPostState extends State<WallPost> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(8),
       ),
       margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
@@ -137,11 +151,15 @@ class _WallPostState extends State<WallPost> {
                 height: 5,
               ),
               // user
-              Text(
-                widget.user,
-                style: TextStyle(
-                  color: Colors.grey[500],
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.user,
+                    style: TextStyle(color: Colors.grey[400]),
+                  ),
+                  Text(" . ", style: TextStyle(color: Colors.grey[400])),
+                  Text(widget.time, style: TextStyle(color: Colors.grey[400]))
+                ],
               ),
             ],
           ),
@@ -199,6 +217,10 @@ class _WallPostState extends State<WallPost> {
                 ],
               ),
             ],
+          ),
+
+          const SizedBox(
+            height: 10,
           ),
 
           // comments under the post

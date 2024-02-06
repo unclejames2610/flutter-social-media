@@ -22,17 +22,16 @@ class _ProfilePageState extends State<ProfilePage> {
     await showDialog(
       context: context,
       builder: ((context) => AlertDialog(
-            backgroundColor: Colors.grey[900],
+            backgroundColor: Theme.of(context).colorScheme.primary,
             title: Text(
               "Edit $field",
-              style: const TextStyle(color: Colors.white),
             ),
             content: TextField(
               autofocus: true,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: "Enter new $field",
-                hintStyle: TextStyle(color: Colors.grey),
+                hintStyle: const TextStyle(color: Colors.grey),
               ),
               onChanged: (value) {
                 newValue = value;
@@ -43,7 +42,8 @@ class _ProfilePageState extends State<ProfilePage> {
               TextButton(
                   child: Text(
                     'Cancel',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary),
                   ),
                   onPressed: () => Navigator.of(context).pop()),
 
@@ -51,7 +51,8 @@ class _ProfilePageState extends State<ProfilePage> {
               TextButton(
                   child: Text(
                     'Save',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary),
                   ),
                   onPressed: () => Navigator.of(context).pop(newValue)),
             ],
@@ -67,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(title: const Text("Profile Page")),
         body: StreamBuilder<DocumentSnapshot>(
           stream: usersCollection.doc(currentUser.email).snapshots(),

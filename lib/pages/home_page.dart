@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:social_media/components/drawer.dart';
 import 'package:social_media/components/my_text_field.dart';
 import 'package:social_media/components/wall_post.dart';
+import 'package:social_media/helper/helper_methods.dart';
 import 'package:social_media/pages/profile_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -53,18 +54,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.background,
       drawer: MyDrawer(
         onProfiletap: goToProfilePage,
         onSignOut: signOut,
       ),
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
         title: const Text(
           "The Wall",
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
         // actions: [
         //   IconButton(
@@ -99,6 +96,7 @@ class _HomePageState extends State<HomePage> {
                         user: post['UserEmail'],
                         postId: post.id,
                         likes: List<String>.from(post['Likes'] ?? []),
+                        time: formatDate(post['TimeStamp']),
                       );
                     },
                   );
