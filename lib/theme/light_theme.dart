@@ -17,6 +17,11 @@ ThemeData lightTheme = ThemeData(
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: Colors.grey[800]!,
   ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: Colors.black,
+    ),
+  ),
 );
     
 

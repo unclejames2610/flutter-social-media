@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media/components/comment.dart';
 import 'package:social_media/components/comment_button.dart';
+import 'package:social_media/components/delete_button.dart';
 import 'package:social_media/components/like_button.dart';
 import 'package:social_media/helper/helper_methods.dart';
 
@@ -117,6 +118,55 @@ class _WallPostState extends State<WallPost> {
     );
   }
 
+  // delete a post
+  void deletePost() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Delete Post"),
+              content: const Text("Are you sure you want to delete this post?"),
+              actions: [
+                // cancel btn
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+
+                // delete btn
+                TextButton(
+                  onPressed: () async {
+                    final commentDocs = await FirebaseFirestore.instance
+                        .collection("User Posts")
+                        .doc(widget.postId)
+                        .collection("Comments")
+                        .get();
+
+                    for (var doc in commentDocs.docs) {
+                      await FirebaseFirestore.instance
+                          .collection("User Posts")
+                          .doc(widget.postId)
+                          .collection("Comments")
+                          .doc(doc.id)
+                          .delete();
+                    }
+
+                    // then delete the post
+                    FirebaseFirestore.instance
+                        .collection("User Posts")
+                        .doc(widget.postId)
+                        .delete()
+                        .then((value) => print("post deleted"))
+                        .catchError(
+                            (error) => print("failed to delete post: $error"));
+
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Delete"),
+                ),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -141,26 +191,40 @@ class _WallPostState extends State<WallPost> {
           // ),
 
           // wallpost
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // message
-              Text(widget.message),
-
-              const SizedBox(
-                height: 5,
-              ),
-              // user
-              Row(
+              // group of text
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.user,
-                    style: TextStyle(color: Colors.grey[400]),
+                  // message
+                  Text(widget.message),
+
+                  const SizedBox(
+                    height: 5,
                   ),
-                  Text(" . ", style: TextStyle(color: Colors.grey[400])),
-                  Text(widget.time, style: TextStyle(color: Colors.grey[400]))
+                  // user
+                  Row(
+                    children: [
+                      Text(
+                        widget.user,
+                        style: TextStyle(color: Colors.grey[400]),
+                      ),
+                      Text(" . ", style: TextStyle(color: Colors.grey[400])),
+                      Text(widget.time,
+                          style: TextStyle(color: Colors.grey[400]))
+                    ],
+                  ),
                 ],
               ),
+
+              // delete button
+              if (widget.user == currentUser.email)
+                DeleteButton(
+                  onTap: deletePost,
+                )
             ],
           ),
 

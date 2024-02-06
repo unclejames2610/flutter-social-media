@@ -14,4 +14,9 @@ ThemeData darkTheme = ThemeData(
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: Colors.grey[300]!,
   ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      foregroundColor: Colors.white,
+    ),
+  ),
 );

@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
           ),
           // post message
           Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding: const EdgeInsets.symmetric(vertical: 25.0),
             child: Row(
               children: [
                 Expanded(
@@ -125,9 +125,12 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // post button
-                IconButton(
-                    onPressed: postMessage,
-                    icon: const Icon(Icons.arrow_circle_up))
+                Padding(
+                  padding: const EdgeInsets.only(right: 25.0),
+                  child: IconButton(
+                      onPressed: postMessage,
+                      icon: const Icon(Icons.arrow_circle_up)),
+                )
               ],
             ),
           ),
